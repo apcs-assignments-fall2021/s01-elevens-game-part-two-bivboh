@@ -24,7 +24,14 @@ public class ElevensBoard extends Board {
     // returns true if **any** two of the given cards adds up to exactly 11
     // and false otherwise
     public boolean containsPairSum11(ArrayList<Integer> cardIndexes) {
-        // YOUR CODE HERE
+        for (int i = 1; i < cardIndexes.size(); i++){
+            for (int j = 0; j < cardIndexes.size(); j++){
+                int x = cardAt(cardIndexes.get(i)).getPointValue() + cardAt(cardIndexes.get(j)).getPointValue();
+                if (x==11){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -32,7 +39,23 @@ public class ElevensBoard extends Board {
     // returns true if there is at least 1 Jack, at least 1 Queen, and at least 1 King
     // amongst the selected cards, and false otherwise
     public boolean containsJQK(ArrayList<Integer> cardIndexes) {
-        // YOUR CODE HERE
+        int q = 0;
+        int j = 0;
+        int k = 0;
+        for (int i = 0; i < cardIndexes.size(); i++){
+            if (cardAt(cardIndexes.get(i)).getRank().equals("jack")){
+                j++;
+            }
+            if (cardAt(cardIndexes.get(i)).getRank().equals("queen")){
+                q++;
+            }
+            if (cardAt(cardIndexes.get(i)).getRank().equals("king")){
+                k++;
+            }
+        }
+        if (k > 0 && (q > 0) && (j > 0)){
+            return true;
+        }
         return false;
     }
 
@@ -45,9 +68,8 @@ public class ElevensBoard extends Board {
         // allCards is a list of the indexes of all cards on the board
         ArrayList<Integer> allCards = getAllCardIndexes();
 
-        // YOUR CODE HERE
-        // Just 1-2 lines of code needed
-        return false;
+
+        return containsJQK(allCards) || containsPairSum11(allCards);
     }
 
     // Determines if the selected cards form a valid group for removal. In Elevens,
@@ -55,7 +77,12 @@ public class ElevensBoard extends Board {
     // (2) a group of three cards consisting of a jack, a queen, and a king in some order
     @Override
     public boolean isLegal(ArrayList<Integer> selectedCards) {
-        // YOUR CODE HERE
+        if (selectedCards.size() == 2){
+            return containsPairSum11(selectedCards);
+        }
+        else if (selectedCards.size() == 3){
+            return containsJQK(selectedCards);
+        }
         return false;
     }
 }
